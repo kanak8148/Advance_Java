@@ -7,6 +7,7 @@ import java.sql.Statement;
 
 public class TestInsert {
 	
+	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		
 		Class.forName("com.mysql.cj.jdbc.Driver");
@@ -14,10 +15,12 @@ public class TestInsert {
 		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/rays", "root", "root");
 		
 		Statement stmt = conn.createStatement();
+		
 		int i = stmt.executeUpdate("insert into class values(1, 'Akbar', 'Khan')");
 		System.out.println(i + " row affected..(records inserted)");
 
 		conn.close();
+		
 		
 	}
 
