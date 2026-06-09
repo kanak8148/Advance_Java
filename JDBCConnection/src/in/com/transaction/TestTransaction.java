@@ -1,4 +1,4 @@
-package Transaction;
+package in.com.transaction;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,25 +20,18 @@ public class TestTransaction {
 
 			Statement stmt = conn.createStatement();
 
-			int i = stmt.executeUpdate("insert into st_user values(634, 'kanak' ,'kanak','kanak')");
+			int i = stmt.executeUpdate("insert into st_user values(69, 'Suresh', 'Yadav')");
 
-			i = stmt.executeUpdate(
-					"insert into st_user values(76, 'Suresh', 'Yadav', suresh@gmail.com')");
-
-			i = stmt.executeUpdate(
-					"insert into st_user values(866, 'Suresh', 'Yadav', 'suresh@gmail.com' ,'suresh@gmail.com')");
-
+		
 			conn.commit();
-			System.out.println("transaction complited:(records saved)");
+			System.out.println("transaction coplited:(records saved)");
 
 			conn.close();
 			stmt.close();
 
 		} catch (Exception e) {
-			conn.rollback();
+			 conn.rollback();
 			e.printStackTrace();
 		}
-
 	}
-
 }

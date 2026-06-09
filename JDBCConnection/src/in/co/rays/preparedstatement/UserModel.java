@@ -9,18 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserModel {
-	
-	
-	
+
 	public int nextPK() throws ClassNotFoundException, SQLException {
-		
+
 		Connection conn = null;
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/jdbc", "root", "root");
-		
+
 		int pk = 0;
 		PreparedStatement pstmt = conn.prepareStatement("select max(id) from st_user");
-		
+
 		ResultSet rs = pstmt.executeQuery();
 		while (rs.next()) {
 			pk = rs.getInt(1);
@@ -28,12 +26,6 @@ public class UserModel {
 
 		return pk + 1;
 	}
-		
-		
-		
-		
-		
-	
 
 	public void add(UserBean bean) throws ClassNotFoundException, SQLException {
 
@@ -41,18 +33,29 @@ public class UserModel {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/jdbc", "root", "root");
 
-		PreparedStatement pstmt = conn.prepareStatement("Insert into st_user values (?,?,?,?)");
+		try {
 
-		pstmt.setInt(1, nextPK());
-		pstmt.setString(2, bean.getName());
-		pstmt.setString(3, bean.getLoginId());
-		pstmt.setString(4, bean.getPassword());
+			conn.setAutoCommit(false);
 
-		int i = pstmt.executeUpdate();
+			PreparedStatement pstmt = conn.prepareStatement("Insert into st_user values (?,?,?,?)");
 
-		System.out.println("Data successfully insert " + i + " row affected");
+			pstmt.setInt(1, nextPK());
+			pstmt.setString(2, bean.getName());
+			pstmt.setString(3, bean.getLoginId());
+			pstmt.setString(4, bean.getPassword());
 
-		conn.close();
+			int i = pstmt.executeUpdate();
+
+			conn.commit();
+
+			System.out.println("Data successfully insert " + i + " row affected");
+
+			conn.close();
+		} catch (SQLException e) {
+			conn.rollback();
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -108,11 +111,11 @@ public class UserModel {
 				bean.setPassword(rs.getString(4));
 				list.add(bean);
 			}
-	
+
 		} catch (Exception e) {
-		
+
 			e.printStackTrace();
-		
+
 		}
 
 		conn.close();
